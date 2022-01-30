@@ -8,11 +8,11 @@ def sign(m):
 	#generate public key
 	#Your code here
 	curve = secp256k1
-	private_key, public_key = fastecdsa.keys.gen_keypair(curve)
+	private_key, public_key = gen_keypair(curve)
 
 	#generate signature
 	#Your code here
-	tup = fastecdsa.ecdsa.sign(m,private_key)
+	tup = ecdsa.sign(m,private_key)
 	r = tup[0]
 	s = tup[1]
 
@@ -20,5 +20,3 @@ def sign(m):
 	assert isinstance( r, int )
 	assert isinstance( s, int )
 	return( public_key, [r,s] )
-
-

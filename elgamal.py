@@ -4,16 +4,18 @@ from params import p
 from params import g
 
 def keygen():
-    sk = 0
-    pk = 0
+    q=(p-1)/2
+    a = random.randrange(1,q,1)
+    sk = a
+    pk = pow(g,a,p)
     return pk,sk
 
 def encrypt(pk,m):
-    c1 = 0
-    c2 = 0
+    r = random.randrange(1,q,1)
+    c1 = pow(g,r,p)
+    c2 = pow((pow(pk,r,p)*pow(m,1,p)),1,p)
     return [c1,c2]
 
 def decrypt(sk,c):
-    m = 0
+    m = pow((pow(c[1],1,p)*pow(c[0],-sk,p)),1,p)
     return m
-

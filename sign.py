@@ -12,7 +12,7 @@ def sign(m):
 
 	#generate signature
 	#Your code here
-	tup = ecdsa.sign(m,private_key)
+	tup = ecdsa.sign(m,private_key,curve,sha256)
 	r = tup[0]
 	s = tup[1]
 

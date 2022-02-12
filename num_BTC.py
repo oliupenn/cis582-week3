@@ -1,7 +1,7 @@
 import math
 
 def num_BTC(b):
-    c = float(0)
+    c = 50 * b
     return c
 
 

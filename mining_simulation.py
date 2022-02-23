@@ -40,7 +40,7 @@ def Simulate(alpha,gamma,N, seed):
                 #You might need to define new variable to keep track of the number of hidden blocks.
             else:
                 #Write a piece of code to change the required variables.
-                state = 0
+                state = -1
 
         elif state==-1:
             #It's the state 0' in the slides (the paper of Eyal and Gun Sirer)

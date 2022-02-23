@@ -41,8 +41,6 @@ def Simulate(alpha,gamma,N, seed):
             else:
                 #Write a piece of code to change the required variables.
                 state = 0
-                SelfishRevenue += 1
-                ChainLength += 1
 
         elif state==-1:
             #It's the state 0' in the slides (the paper of Eyal and Gun Sirer)
@@ -68,9 +66,9 @@ def Simulate(alpha,gamma,N, seed):
                 state += 1
             else:
                 #The honest miners found a block.
-                state -= 1
-                ChainLength += 1
-                SelfishRevenue += 1
+                state = 0
+                ChainLength += 2
+                SelfishRevenue += 2
 
 
         elif state>2:
@@ -84,20 +82,3 @@ def Simulate(alpha,gamma,N, seed):
                 SelfishRevenue += 1
 
     return float(SelfishRevenue)/ChainLength
-
-
-""" 
-  Uncomment out the following lines to try out your code
-  DON'T include it in your final submission though.
-"""
-
-"""
-#let's run the code with the follwing parameters!
-alpha=0.35
-gamma=0.5
-Nsimu=10**7
-seed = 100
-#This is the theoretical probability computed in the original paper
-print("Theoretical probability :",(alpha*(1-alpha)**2*(4*alpha+gamma*(1-2*alpha))-alpha**3)/(1-alpha*(1+(2-alpha)*alpha)))
-print("Simulated probability :",Simulate(alpha,gamma,Nsimu, seed))
-"""

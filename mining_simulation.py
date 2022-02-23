@@ -36,13 +36,12 @@ def Simulate(alpha,gamma,N, seed):
             if r<=alpha:
                 #The selfish miners found a new block.
                 state = 2
-                SelfishRevenue = 1
+                SelfishRevenue += 1
                 #Write a piece of code to change the required variables.
                 #You might need to define new variable to keep track of the number of hidden blocks.
             else:
                 #Write a piece of code to change the required variables.
                 state = 0
-                SelfishRevenue = 1
 
         elif state==-1:
             #It's the state 0' in the slides (the paper of Eyal and Gun Sirer)
@@ -51,36 +50,41 @@ def Simulate(alpha,gamma,N, seed):
             if r<=alpha:
                 state=0
                 ChainLength+=2
-                SelfishRevenue = 2
+                SelfishRevenue += 2
             elif r<=alpha+(1-alpha)*gamma:
                 state=0
                 ChainLength+=2
-                SelfishRevenue = 1
+                SelfishRevenue += 1
             else:
                 state=0
                 ChainLength+=2
-                SelfishRevenue = 0
+                SelfishRevenue += 0
 
 
         elif state==2:
             #The selfish pool has 2 hidden block.
             if r<=alpha:
                 state += 1
-                SelfishRevenue = 1
+                ChainLength += 1
+                SelfishRevenue += 1
             else:
                 #The honest miners found a block.
-                state = 1
-                SelfishRevenue = 1
+                state -= 1
+                ChainLength += 1
+                SelfishRevenue += 1
 
 
         elif state>2:
             if r<=alpha:
                 #The selfish miners found a new block
                 state += 1
-                SelfishRevenue = 1
+                ChainLength += 1
+                SelfishRevenue += 1
             else:
                 #The honest miners found a block
                 state -= 1
+                ChainLength += 1
+                SelfishRevenue += 1
 
     return float(SelfishRevenue)/ChainLength
 

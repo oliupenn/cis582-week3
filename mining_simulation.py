@@ -50,12 +50,15 @@ def Simulate(alpha,gamma,N, seed):
             #Write a piece of code to change the required variables in each one.
             if r<=alpha:
                 state=0
-                SelfishRevenue = 1
+                ChainLength+=2
+                SelfishRevenue = 2
             elif r<=alpha+(1-alpha)*gamma:
                 state=0
+                ChainLength+=2
                 SelfishRevenue = 1
             else:
                 state=0
+                ChainLength+=2
                 SelfishRevenue = 0
 
 

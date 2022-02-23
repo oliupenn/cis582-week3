@@ -78,8 +78,6 @@ def Simulate(alpha,gamma,N, seed):
             if r<=alpha:
                 #The selfish miners found a new block
                 state += 1
-                ChainLength += 1
-                SelfishRevenue += 1
             else:
                 #The honest miners found a block
                 state -= 1

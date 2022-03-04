@@ -23,7 +23,8 @@ def send_tokens( receiver_pk, tx_amount ):
     last_valid_round = params.last
 
     #Your code here
-
+    sender_pk = None
+    txid = None
     return sender_pk, txid
 
 # Function from Algorand Inc.

@@ -24,13 +24,14 @@ def send_tokens( receiver_pk, tx_amount ):
     last_valid_round = params.last
 
     sender_sk = 'PBqeVXN/PUQBp7m62XoECBzJaaM5ieDcxmaLmBbnRy2svm4CCwLNIbDCLJhWf/4aUlg6XaX7yqor9lyvtY30LA=='
+    sender_mnemonic = mnemonic.from_private_key(sender_sk)
+    sender_pk = mnemonic.to_public_key(sender_mnemonic)
     receiver_address = account.address_from_private_key(receiver_pk)
     txn  = transaction.PaymentTxn('VS7G4AQLALGSDMGCFSMFM776DJJFQOS5UX54VKRL6ZOK7NMN6QWNSMWX3Y', tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_address, tx_amount)
     signed_txn = txn.sign(sender_sk)
     signed_txn.dictify()
-    # sender_pk = None
-    # txid = txn.get_txid()
-    return None, txn.get_txid()
+    txid = txn.get_txid()
+    return sender_pk, txid
 
 # Function from Algorand Inc.
 def wait_for_confirmation(client, txid):

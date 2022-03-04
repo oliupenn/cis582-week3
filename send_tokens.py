@@ -30,6 +30,7 @@ def send_tokens( receiver_pk, tx_amount ):
     txn  = transaction.PaymentTxn('VS7G4AQLALGSDMGCFSMFM776DJJFQOS5UX54VKRL6ZOK7NMN6QWNSMWX3Y', tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_address, tx_amount)
     signed_txn = txn.sign(sender_sk)
     signed_txn.dictify()
+    print 'dlm'
     txid = txn.get_txid()
     return sender_pk, txid
 

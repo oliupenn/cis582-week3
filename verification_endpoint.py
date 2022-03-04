@@ -11,31 +11,35 @@ app.url_map.strict_slashes = False
 @app.route('/verify', methods=['GET','POST'])
 def verify():
     content = request.get_json(silent=True)
-
+    message = content['payload']['message']
+    platform = content['payload']['platform']
     #Check if signature is valid
-    eth_account.Account.enable_unaudited_hdwallet_features()
-    acct, mnemonic = eth_account.Account.create_with_mnemonic()
 
-    eth_pk = acct.address
-    eth_sk = acct.key
+    if platform == 'Ethereum':
+        eth_account.Account.enable_unaudited_hdwallet_features()
+        acct, mnemonic = eth_account.Account.create_with_mnemonic()
 
-    eth_encoded_msg = eth_account.messages.encode_defunct(text=content)
-    eth_sig_obj = eth_account.Account.sign_message(eth_encoded_msg,eth_sk)
+        eth_pk = acct.address
+        eth_sk = acct.key
 
-    print( eth_sig_obj.messageHash )
-    if eth_account.Account.recover_message(eth_encoded_msg,signature=eth_sig_obj.signature.hex()) == eth_pk:
-        result = True
-    else:
-        result = False
+        eth_encoded_msg = eth_account.messages.encode_defunct(text=message)
+        eth_sig_obj = eth_account.Account.sign_message(eth_encoded_msg,eth_sk)
+
+        print( eth_sig_obj.messageHash )
+        if eth_account.Account.recover_message(eth_encoded_msg,signature=eth_sig_obj.signature.hex()) == eth_pk:
+            result = True
+        else:
+            result = False
     
-    algo_sk, algo_pk = algosdk.account.generate_account()
-    algo_sig_str = algosdk.util.sign_bytes(content.encode('utf-8'),algo_sk)
+    elif platform == 'Algorand':
+        algo_sk, algo_pk = algosdk.account.generate_account()
+        algo_sig_str = algosdk.util.sign_bytes(message.encode('utf-8'),algo_sk)
 
-    if algosdk.util.verify_bytes(payload.encode('utf-8'),algo_sig_str,algo_pk):
-        result = True
-    )
-    else:
-        result = False
+        if algosdk.util.verify_bytes(payload.encode('utf-8'),algo_sig_str,algo_pk):
+            result = True
+        )
+        else:
+            result = False
 
     return jsonify(result)
 

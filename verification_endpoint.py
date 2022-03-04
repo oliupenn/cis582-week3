@@ -15,6 +15,7 @@ def verify():
     f = open(content)
     # returns JSON object as a dictionary
     data = json.load(f)
+    print(data)
     message = data['payload']['message']
     platform = data['payload']['platform']
     # Check if signature is valid

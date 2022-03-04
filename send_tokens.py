@@ -25,9 +25,9 @@ def send_tokens( receiver_pk, tx_amount ):
 
     receiver_address = account.address_from_private_key(receiver_pk)
     txn  = transaction.PaymentTxn('VS7G4AQLALGSDMGCFSMFM776DJJFQOS5UX54VKRL6ZOK7NMN6QWNSMWX3Y', tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_address, tx_amount)
-    sender_pk = None
-    txid = txn.get_txid()
-    return sender_pk, txid
+    # sender_pk = None
+    # txid = txn.get_txid()
+    return None, txn.get_txid()
 
 # Function from Algorand Inc.
 def wait_for_confirmation(client, txid):

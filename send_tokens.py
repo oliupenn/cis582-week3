@@ -3,6 +3,7 @@
 from algosdk.v2client import algod
 from algosdk import mnemonic
 from algosdk import transaction
+from algosdk import account, encoding
 
 #Connect to Algorand node maintained by PureStake
 algod_address = "https://testnet-algorand.api.purestake.io/ps2"
@@ -22,9 +23,9 @@ def send_tokens( receiver_pk, tx_amount ):
     tx_fee = params.min_fee
     last_valid_round = params.last
 
-    #Your code here
+    txn  = transaction.Transaction('VS7G4AQLALGSDMGCFSMFM776DJJFQOS5UX54VKRL6ZOK7NMN6QWNSMWX3Y', tx_fee, first_valid_round, last_valid_round)
     sender_pk = None
-    txid = None
+    txid = txn.get_txid()
     return sender_pk, txid
 
 # Function from Algorand Inc.
@@ -43,3 +44,10 @@ def wait_for_confirmation(client, txid):
     print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
 
+# if __name__ == '__main__':
+#     private_key, address = account.generate_account()
+#     mnemonic_secret = "YOUR MNEMONIC HERE"
+#     sk = mnemonic.to_private_key(mnemonic_secret)
+#     pk = mnemonic.to_public_key(mnemonic_secret)
+#     print("Private key:", private_key)
+#     print("Address:", address)

@@ -37,7 +37,7 @@ def send_tokens( receiver_pk, tx_amount ):
     except Exception as e:
         print(e)
 
-    return sender_address, txid
+    return sender_pk, txid
 
 # Function from Algorand Inc.
 def wait_for_confirmation(client, txid):

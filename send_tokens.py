@@ -30,8 +30,6 @@ def send_tokens( receiver_pk, tx_amount ):
     signed_txn = txn.sign(sender_sk)
 
     try:
-        acl.send_transaction(signed_txn)
-        txid = None
         txid = acl.send_transaction(signed_txn)
         txinfo = wait_for_confirmation_algo(acl, txid=tx_id)
     except Exception as e:

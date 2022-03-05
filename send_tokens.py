@@ -30,10 +30,13 @@ def send_tokens( receiver_pk, tx_amount ):
 
     signed_txn = txn.sign(sender_sk)
 
-    acl.send_transaction(signed_txn)
-    txid = None
-    txid = acl.send_transaction(signed_txn)
-    txinfo = wait_for_confirmation_algo(acl, txid=tx_id)
+    try:
+        acl.send_transaction(signed_txn)
+        txid = None
+        txid = acl.send_transaction(signed_txn)
+        txinfo = wait_for_confirmation_algo(acl, txid=tx_id)
+    except Exception as e:
+        print(e)
 
     return sender_address, txid
 
@@ -52,11 +55,3 @@ def wait_for_confirmation(client, txid):
         txinfo = client.pending_transaction_info(txid)
     print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
-
-if __name__ == '__main__':
-    private_key, address = account.generate_account()
-    mnemonic_secret = mnemonic.from_private_key(private_key)
-    sk = mnemonic.to_private_key(mnemonic_secret)
-    pk = mnemonic.to_public_key(mnemonic_secret)
-    print("Private key:", private_key)
-    print("Address:", address)

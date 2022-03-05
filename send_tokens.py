@@ -24,9 +24,8 @@ def send_tokens( receiver_pk, tx_amount ):
     last_valid_round = params.last
 
     sender_sk = 't+uEbYWYTQomhqPE0jKXBhxnbKX0nF97GFfvrlEbjCq23b0IhQGk2qnTi5xvEqgLulgXc9MtT+YQJCBFkfJ/UQ=='
-    sender_address = 'W3O32CEFAGSNVKOTROOG6EVIBO5FQF3T2MWU7ZQQEQQELEPSP5IYXYZZ7E'
-    receiver_address = account.address_from_private_key(receiver_pk)
-    txn = transaction.PaymentTxn(sender_address, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_address, tx_amount)
+    sender_pk = 'W3O32CEFAGSNVKOTROOG6EVIBO5FQF3T2MWU7ZQQEQQELEPSP5IYXYZZ7E'
+    txn = transaction.PaymentTxn(sender_pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount)
 
     signed_txn = txn.sign(sender_sk)
 

@@ -23,25 +23,15 @@ def verify():
     # Check if signature is valid
 
     if platform == 'Ethereum':
-        eth_account.Account.enable_unaudited_hdwallet_features()
-        acct, mnemonic = eth_account.Account.create_with_mnemonic()
-
-        eth_pk = acct.address
-        eth_sk = acct.key
-
         eth_encoded_msg = eth_account.messages.encode_defunct(text=json.dumps(payload))
-        eth_sig_obj = eth_account.Account.sign_message(eth_encoded_msg, eth_sk)
 
-        if eth_account.Account.recover_message(eth_encoded_msg, signature=eth_sig_obj.signature.hex()) == eth_pk:
+        if eth_account.Account.recover_message(eth_encoded_msg, signature=sig) == pk:
             result = True
         else:
             result = False
 
     elif platform == 'Algorand':
-        algo_sk, algo_pk = algosdk.account.generate_account()
-        algo_sig_str = algosdk.util.sign_bytes(json.dumps(payload).encode('utf-8'), algo_sk)
-
-        if algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), algo_sig_str, algo_pk):
+        if algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, pk):
             result = True
         else:
             result = False

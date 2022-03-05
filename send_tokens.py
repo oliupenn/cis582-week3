@@ -29,7 +29,8 @@ def send_tokens( receiver_pk, tx_amount ):
     txn = transaction.PaymentTxn(sender_address, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_address, tx_amount)
 
     signed_txn = txn.sign(sender_sk)
-
+    
+    txid = None
     txid = acl.send_transaction(signed_txn)
 
     return sender_pk, txid

@@ -17,9 +17,9 @@ def process_order(order):
     sell_amt = order['sell_amount']
     creator_id = order.get('creator_id')
     if creator_id != None:
-        new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_ccy=buy_currency, sell_ccy=sell_currency, buy_amt=buy_amount, sell_amt=sell_amount, creator_id=creator_id)
+        new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_ccy, sell_currency=sell_ccy, buy_amount=buy_amt, sell_amount=sell_amt, creator_id=creator_id)
     else:
-        new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_ccy=buy_currency, sell_ccy=sell_currency, buy_amt=buy_amount, sell_amt=sell_amount)
+        new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_ccy, sell_currency=sell_ccy, buy_amount=buy_amt, sell_amount=sell_amt)
     
     session.add(new_order)
     session.commit()

@@ -9,13 +9,14 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 def process_order(order):
-    sender_pk = order['sender_pk']
-    receiver_pk = order['receiver_pk']
-    buy_ccy = order['buy_currency']
-    sell_ccy = order['sell_currency']
-    buy_amt = order['buy_amount']
-    sell_amt = order['sell_amount']
+    sender_pk = order.get('sender_pk')
+    receiver_pk = order.get('receiver_pk')
+    buy_ccy = order.get('buy_currency')
+    sell_ccy = order.get('sell_currency')
+    buy_amt = order.get('buy_amount')
+    sell_amt = order.get('sell_amount')
     creator_id = order.get('creator_id')
+    
     if creator_id != None:
         new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_ccy, sell_currency=sell_ccy, buy_amount=buy_amt, sell_amount=sell_amt, creator_id=creator_id)
     else:
@@ -23,9 +24,9 @@ def process_order(order):
     
     session.add(new_order)
     session.commit()
-    old_orders = session.query(Order).filter(Order.filled == None).all()
+    unfilled_orders = session.query(Order).filter(Order.filled == None).all()
 
-    for old_order in old_orders:
+    for old_order in unfilled_orders:
         if new_order.filled == None:
             if new_order.sell_currency == old_order.buy_currency:
                 if new_order.buy_currency == old_order.sell_currency:

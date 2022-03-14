@@ -94,9 +94,7 @@ def trade():
             new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_ccy, sell_currency=sell_ccy, buy_amount=buy_amt, sell_amount=sell_amt, signature=sig)
             g.session.add(new_order)
             g.session.commit()
-            return jsonify(result)
-        else:
-            return jsonify(result)
+        return jsonify(result)
     else:
         return jsonify(True)
 
@@ -105,7 +103,7 @@ def order_book():
     #Your code here
     #Note that you can access the database session using g.session
     orders = g.session.query(Order)
-    result = dict([('data', [])])
+    result = {'data': []}
 
     for order in orders:
         data = dict()
@@ -117,7 +115,7 @@ def order_book():
         data['sell_amount'] = order.sell_amount
         data['signature'] = order.signature
         result['data'].append(data)
-    return jsonify(result)
+    return result
 
 if __name__ == '__main__':
     app.run(port='5002')

@@ -78,7 +78,7 @@ def trade():
         sell_amt = payload['sell_amount']
         platform = payload['platform']
 
-        if platform == 'ALgorand':
+        if platform == 'Algorand':
             if algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, sender_pk):
                 result = True
             else:

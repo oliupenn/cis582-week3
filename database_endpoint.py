@@ -105,7 +105,7 @@ def order_book():
     #Your code here
     #Note that you can access the database session using g.session
     orders = g.session.query(Order)
-    result = dict('data'=[])
+    result = dict([('data', [])])
 
     for order in orders:
         data = dict()

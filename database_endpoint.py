@@ -30,7 +30,7 @@ def shutdown_session(response_or_exc):
 -------- Helper methods (feel free to add your own!) -------
 """
 
-def log_message(d)
+def log_message(d):
     # Takes input dictionary d and writes it to the Log table
     new_log = Log(message=json.dumps(d))
     g.session.add(new_log)
@@ -106,7 +106,7 @@ def order_book():
     #Note that you can access the database session using g.session
     orders = g.session.query(Order)
     result = dict('data': [])
-    
+
     for order in orders:
         data = dict()
         data['sender_pk'] = order.sender_pk

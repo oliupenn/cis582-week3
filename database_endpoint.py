@@ -32,7 +32,9 @@ def shutdown_session(response_or_exc):
 
 def log_message(d)
     # Takes input dictionary d and writes it to the Log table
-    pass
+    new_log = Log(message=json.dumps(d))
+    g.session.add(new_log)
+    g.session.commit()
 
 """
 ---------------- Endpoints ----------------
@@ -65,6 +67,38 @@ def trade():
             
         #Your code here
         #Note that you can access the database session using g.session
+        sig = content['sig']
+        payload = content['payload']
+
+        sender_pk = payload['sender_pk']
+        receiver_pk = payload['receiver_pk']
+        buy_ccy = payload['buy_currency']
+        sell_ccy = payload['sell_currency']
+        buy_amt = payload['buy_amount']
+        sell_amt = payload['sell_amount']
+        platform = payload['platform']
+
+        if platform == 'ALgorand':
+            if algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, sender_pk):
+                result = True
+            else:
+                result = False
+        elif platform == 'Ethereum':
+            encoded_msg = eth_account.messages.encode_defunct(text=json.dumps(payload))
+            if eth_account.Account.recover_message(encoded_msg, signature=sig) == sender_pk:
+                result = True
+            else:
+                result = False
+
+        if result:
+            new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_ccy, sell_currency=sell_ccy, buy_amount=buy_amt, sell_amount=sell_amt, signature=sig)
+            g.session.add(new_order)
+            g.session.commit()
+            return jsonify(result)
+        else:
+            return jsonify(result)
+    else:
+        return jsonify(True)
 
 @app.route('/order_book')
 def order_book():

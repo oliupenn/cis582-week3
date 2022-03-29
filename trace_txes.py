@@ -37,7 +37,16 @@ class TXO:
 
     @classmethod
     def from_tx_hash(cls,tx_hash,n=0):
-        pass
+        tx = rpc_connection.getrawtransaction(tx_hash,True)
+        hash = tx.get('hash')
+        vout = tx.get('vout')[n]
+        amount = vout.get('value')
+        public_key = vout.get('scriptPubKey')
+        addresses = public_key.get('addresses')
+        owner = addresses[0]
+        time = tx.get('time')
+        time = datetime.fromtimestamp(time)
+        return cls(tx_hash,n,amount,owner,time)
         #YOUR CODE HERE
 
     def get_inputs(self,d=1):

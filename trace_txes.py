@@ -56,6 +56,7 @@ class TXO:
         for i in vin:
             txid = i.get('txid')
             self.inputs.append(TXO.from_tx_hash(txid))
+            print(self.inputs)
         if d == 2:
             for input in self.inputs:
                 input.get_inputs()

@@ -52,11 +52,12 @@ class TXO:
     def get_inputs(self,d=1):
         tx = rpc_connection.getrawtransaction(self.tx_hash, True)
         vin = tx.get('vin')
+        print(vin)
         print(self.inputs)
         for i in vin:
             txid = i.get('txid')
             self.inputs.append(TXO.from_tx_hash(txid))
-            print(self.inputs)
         if d == 2:
             for input in self.inputs:
+                print('hello')
                 input.get_inputs()

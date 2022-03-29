@@ -50,12 +50,14 @@ class TXO:
         #YOUR CODE HERE
 
     def get_inputs(self,d=1):
-        print(d)
         tx = rpc_connection.getrawtransaction(self.tx_hash, True)
         vin = tx.get('vin')
+        print(vin)
+        print(self.inputs)
         for i in vin:
             txid = i.get('txid')
             self.inputs.append(TXO.from_tx_hash(txid))
-        if d == 2:
+        if d > 1:
+            d -= 1
             for input in self.inputs:
-                input.get_inputs()
+                input.get_inputs(d=d)

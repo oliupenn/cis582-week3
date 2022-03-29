@@ -40,7 +40,7 @@ class TXO:
         tx = rpc_connection.getrawtransaction(tx_hash,True)
         hash = tx.get('hash')
         vout = tx.get('vout')[n]
-        amount = vout.get('value')
+        amount = vout.get('value') * 100000000
         public_key = vout.get('scriptPubKey')
         addresses = public_key.get('addresses')
         owner = addresses[0]

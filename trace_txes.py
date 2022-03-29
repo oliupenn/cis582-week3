@@ -40,7 +40,7 @@ class TXO:
         tx = rpc_connection.getrawtransaction(tx_hash,True)
         hash = tx.get('hash')
         vout = tx.get('vout')[n]
-        amount = vout.get('value') * 100000000
+        amount = int(vout.get('value') * 100000000)
         public_key = vout.get('scriptPubKey')
         addresses = public_key.get('addresses')
         owner = addresses[0]
@@ -52,9 +52,9 @@ class TXO:
     def get_inputs(self,d=1):
         tx = rpc_connection.getrawtransaction(self.tx_hash, True)
         vin = tx.get('vin')
-        if d == 1:
-            for i in vin:
-                txid = i.get('txid')
-                self.inputs.append(TXO.from_tx_hash(txid))
-
-
+        for i in vin:
+            txid = i.get('txid')
+            self.inputs.append(TXO.from_tx_hash(txid))
+        if d == 2:
+            for input in self.inputs:
+                input.get_inputs()

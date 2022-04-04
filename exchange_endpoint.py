@@ -45,6 +45,7 @@ def check_sig(payload,sig):
           result = True
       else:
           result = False
+  return result
 
 def fill_order(order,txes=[]):
     sender_pk = order.get('sender_pk')
@@ -177,6 +178,6 @@ def order_book():
       data['tx_id'] = order.tx_id
       result['data'].append(data)
   return jsonify(result)
-  
+
 if __name__ == '__main__':
     app.run(port='5002')

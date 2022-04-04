@@ -32,20 +32,13 @@ def shutdown_session(response_or_exc):
 """ Suggested helper methods """
 
 def check_sig(payload,sig):
-  platform = payload.get('platform')
-  pk = payload.get('pk')
-  if platform == 'Ethereum':
-      eth_encoded_msg = eth_account.messages.encode_defunct(text=json.dumps(payload))
-      if eth_account.Account.recover_message(eth_encoded_msg, signature=eth_sig_obj.signature.hex()) == pk:
-          result = True
-      else:
-          result = False
-  elif platform == 'Algorand':
-      if algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, pk):
-          result = True
-      else:
-          result = False
-  return result
+    platform = payload.get('platform')
+    pk = payload.get('pk')
+    if platform == 'Ethereum':
+        eth_encoded_msg = eth_account.messages.encode_defunct(text=json.dumps(payload))
+        return eth_account.Account.recover_message(eth_encoded_msg, signature=eth_sig_obj.signature.hex()) == pk
+    elif platform == 'Algorand':
+        return algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, pk)
 
 def fill_order(order,txes=[]):
     sender_pk = order.get('sender_pk')
@@ -125,7 +118,7 @@ def trade():
                 print( json.dumps(content) )
                 log_message(content)
                 return jsonify( False )
-
+      
         for column in columns:
             if not column in content['payload'].keys():
                 print( f"{column} not received by Trade" )
@@ -133,8 +126,8 @@ def trade():
                 log_message(content)
                 return jsonify( False )
           
-      #Your code here
-      #Note that you can access the database session using g.session
+        #Your code here
+        #Note that you can access the database session using g.session
 
         sig = content.get('sig')
         payload = content.get('payload')
@@ -146,7 +139,7 @@ def trade():
             buy_amount = payload['buy_amount']
             sell_amount = payload['sell_amount']
             tx_id = payload['tx_id']
-            # TODO: Add the order to the database
+        # TODO: Add the order to the database
             order = Order(sender_pk=sender_pk,receiver_pk=receiver_pk,buy_currency=buy_currency,sell_currency=sell_currency,buy_amount=buy_amount,sell_amount=sell_amount,tx_id=tx_id)
             g.session.add(order)
             g.session.commit()
@@ -156,7 +149,7 @@ def trade():
         fill_order(order) # TODO: Fill the order
         return jsonify(True)
     else:
-        return jsonify( False )
+        return jsonify(False)
 
 @app.route('/order_book')
 def order_book():
@@ -164,7 +157,7 @@ def order_book():
   #Note that you can access the database session using g.session
     orders = g.session.query(Order)
     result = dict('data': [])
-    
+
     for order in orders:
         data = dict()
         data['sender_pk'] = order.sender_pk
@@ -179,4 +172,4 @@ def order_book():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(port='5002')
+        app.run(port='5002')

@@ -167,7 +167,6 @@ def order_book():
         data['buy_amount'] = order.buy_amount
         data['sell_amount'] = order.sell_amount
         data['signature'] = order.signature
-        data['creator_id'] = order.id
         result['data'].append(data)
     return jsonify(result)
 

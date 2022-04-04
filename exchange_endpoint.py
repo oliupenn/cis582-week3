@@ -155,6 +155,7 @@ def trade():
         # TODO: Be sure to return jsonify(True) or jsonify(False) depending on if the method was successful
           return jsonify(True)
         else:
+          log_message(payload)
           return jsonify(False)
 
 @app.route('/order_book')

@@ -112,75 +112,71 @@ def log_message(d):
 
 @app.route('/trade', methods=['POST'])
 def trade():
-  print("In trade endpoint")
-  if request.method == "POST":
-      content = request.get_json(silent=True)
-      print( f"content = {json.dumps(content)}" )
-      columns = [ "sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "platform" ]
-      fields = [ "sig", "payload" ]
+    print("In trade endpoint")
+    if request.method == "POST":
+        content = request.get_json(silent=True)
+        print( f"content = {json.dumps(content)}" )
+        columns = [ "sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "platform" ]
+        fields = [ "sig", "payload" ]
 
-      for field in fields:
-          if not field in content.keys():
-              print( f"{field} not received by Trade" )
-              print( json.dumps(content) )
-              log_message(content)
-              return jsonify( False )
-      
-      for column in columns:
-          if not column in content['payload'].keys():
-              print( f"{column} not received by Trade" )
-              print( json.dumps(content) )
-              log_message(content)
-              return jsonify( False )
+        for field in fields:
+            if not field in content.keys():
+                print( f"{field} not received by Trade" )
+                print( json.dumps(content) )
+                log_message(content)
+                return jsonify( False )
+
+        for column in columns:
+            if not column in content['payload'].keys():
+                print( f"{column} not received by Trade" )
+                print( json.dumps(content) )
+                log_message(content)
+                return jsonify( False )
           
       #Your code here
       #Note that you can access the database session using g.session
 
-      # TODO: Check the signature
-      sig = content.get('sig')
-      payload = content.get('payload')
-      if check_sig(payload, sig):
-      # TODO: Add the order to the database
-        sender_pk = payload['sender_pk']
-        receiver_pk = payload['receiver_pk']
-        buy_currency = payload['buy_currency']
-        sell_currency = payload['sell_currency']
-        buy_amount = payload['buy_amount']
-        sell_amount = payload['sell_amount']
-        tx_id = payload['tx_id']
-        order = Order(sender_pk=sender_pk,receiver_pk=receiver_pk,buy_currency=buy_currency,sell_currency=sell_currency,buy_amount=buy_amount,sell_amount=sell_amount,tx_id=tx_id)
-        g.session.add(order)
-        g.session.commit()
-      # TODO: Fill the order
-        fill_order(order)
-      # TODO: Be sure to return jsonify(True) or jsonify(False) depending on if the method was successful
+        sig = content.get('sig')
+        payload = content.get('payload')
+        if check_sig(payload, sig): # TODO: Check the signature
+            sender_pk = payload['sender_pk']
+            receiver_pk = payload['receiver_pk']
+            buy_currency = payload['buy_currency']
+            sell_currency = payload['sell_currency']
+            buy_amount = payload['buy_amount']
+            sell_amount = payload['sell_amount']
+            tx_id = payload['tx_id']
+            # TODO: Add the order to the database
+            order = Order(sender_pk=sender_pk,receiver_pk=receiver_pk,buy_currency=buy_currency,sell_currency=sell_currency,buy_amount=buy_amount,sell_amount=sell_amount,tx_id=tx_id)
+            g.session.add(order)
+            g.session.commit()
+        else:
+            log_message(payload)
+            return jsonify(False)
+        fill_order(order) # TODO: Fill the order
         return jsonify(True)
-      else:
-        log_message(payload)
-        return jsonify(False)
-  else:
-    return jsonify(True)
-
+    else:
+        return jsonify( False )
 
 @app.route('/order_book')
 def order_book():
-    #Your code here
-    #Note that you can access the database session using g.session
-  orders = g.session.query(Order)
-  result = dict('data': [])
-
-  for order in orders:
-      data = dict()
-      data['sender_pk'] = order.sender_pk
-      data['receiver_pk'] = order.receiver_pk
-      data['buy_currency'] = order.buy_currency
-      data['sell_currency'] = order.sell_currency
-      data['buy_amount'] = order.buy_amount
-      data['sell_amount'] = order.sell_amount
-      data['signature'] = order.signature
-      data['tx_id'] = order.tx_id
-      result['data'].append(data)
-  return jsonify(result)
+  #Your code here
+  #Note that you can access the database session using g.session
+    orders = g.session.query(Order)
+    result = dict('data': [])
+    
+    for order in orders:
+        data = dict()
+        data['sender_pk'] = order.sender_pk
+        data['receiver_pk'] = order.receiver_pk
+        data['buy_currency'] = order.buy_currency
+        data['sell_currency'] = order.sell_currency
+        data['buy_amount'] = order.buy_amount
+        data['sell_amount'] = order.sell_amount
+        data['signature'] = order.signature
+        data['tx_id'] = order.tx_id
+        result['data'].append(data)
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(port='5002')

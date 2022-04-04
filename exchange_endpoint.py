@@ -156,7 +156,7 @@ def order_book():
   #Your code here
   #Note that you can access the database session using g.session
     orders = g.session.query(Order)
-    result = dict('data': [])
+    result = []
 
     for order in orders:
         data = dict()
@@ -167,7 +167,8 @@ def order_book():
         data['buy_amount'] = order.buy_amount
         data['sell_amount'] = order.sell_amount
         data['signature'] = order.signature
-        result['data'].append(data)
+        data['tx_id'] = order.tx_id
+        result.append(data)
     return jsonify(result)
 
 if __name__ == '__main__':

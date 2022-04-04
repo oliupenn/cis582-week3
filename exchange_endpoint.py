@@ -169,7 +169,7 @@ def order_book():
         data['signature'] = order.signature
         data['tx_id'] = order.tx_id
         result.append(data)
-    return jsonify(result)
+    return json.dumps(result)
 
 if __name__ == '__main__':
     app.run(port='5002')

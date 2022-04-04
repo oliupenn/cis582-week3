@@ -155,7 +155,6 @@ def trade():
 def order_book():
   #Your code here
   #Note that you can access the database session using g.session
-    print('order book init')
     orders = g.session.query(Order)
     result = dict('data': [])
 
@@ -168,7 +167,7 @@ def order_book():
         data['buy_amount'] = order.buy_amount
         data['sell_amount'] = order.sell_amount
         data['signature'] = order.signature
-        data['tx_id'] = order.tx_id
+        data['creator_id'] = order.id
         result['data'].append(data)
     return jsonify(result)
 

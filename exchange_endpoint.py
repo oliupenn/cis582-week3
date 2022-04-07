@@ -41,18 +41,7 @@ def check_sig(payload,sig):
         return algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, pk)
 
 def fill_order(order,txes=[]):
-    sender_pk = order.get('sender_pk')
-    receiver_pk = order.get('receiver_pk')
-    buy_ccy = order.get('buy_currency')
-    sell_ccy = order.get('sell_currency')
-    buy_amt = order.get('buy_amount')
-    sell_amt = order.get('sell_amount')
-    creator_id = order.get('creator_id')
-    
-    if creator_id != None:
-        new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_ccy, sell_currency=sell_ccy, buy_amount=buy_amt, sell_amount=sell_amt, creator_id=creator_id)
-    else:
-        new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_ccy, sell_currency=sell_ccy, buy_amount=buy_amt, sell_amount=sell_amt)
+    new_order = order
     
     session.add(new_order)
     session.commit()

@@ -36,7 +36,7 @@ def check_sig(payload,sig):
     pk = payload.get('pk')
     if platform == 'Ethereum':
         eth_encoded_msg = eth_account.messages.encode_defunct(text=json.dumps(payload))
-        return eth_account.Account.recover_message(eth_encoded_msg, signature=eth_sig_obj.signature.hex()) == pk
+        return eth_account.Account.recover_message(eth_encoded_msg, signature=sig) == pk
     elif platform == 'Algorand':
         return algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, pk)
 

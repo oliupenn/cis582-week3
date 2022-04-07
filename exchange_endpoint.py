@@ -44,7 +44,7 @@ def fill_order(order,txes=[]):
     new_order = order
     g.session.add(new_order)
     g.session.commit()
-    unfilled_orders = session.query(Order).filter(Order.filled == None).all()
+    unfilled_orders = g.session.query(Order).filter(Order.filled == None).all()
 
     for old_order in unfilled_orders:
         if new_order.filled == None:

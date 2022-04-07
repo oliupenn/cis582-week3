@@ -42,9 +42,8 @@ def check_sig(payload,sig):
 
 def fill_order(order,txes=[]):
     new_order = order
-    
-    session.add(new_order)
-    session.commit()
+    g.session.add(new_order)
+    g.session.commit()
     unfilled_orders = session.query(Order).filter(Order.filled == None).all()
 
     for old_order in unfilled_orders:

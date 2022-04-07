@@ -101,6 +101,8 @@ def log_message(d):
 
 """ End of helper methods """
 
+
+
 @app.route('/trade', methods=['POST'])
 def trade():
     print("In trade endpoint")
@@ -126,6 +128,7 @@ def trade():
           
         #Your code here
         #Note that you can access the database session using g.session
+
         sig = content.get('sig')
         payload = content.get('payload')
         if check_sig(payload, sig): # TODO: Check the signature
@@ -135,7 +138,7 @@ def trade():
             sell_currency = payload['sell_currency']
             buy_amount = payload['buy_amount']
             sell_amount = payload['sell_amount']
-            tx_id = payload['tx_id']
+            # tx_id = payload['tx_id']
         # TODO: Add the order to the database
             order = Order(sender_pk=sender_pk,receiver_pk=receiver_pk,buy_currency=buy_currency,sell_currency=sell_currency,buy_amount=buy_amount,sell_amount=sell_amount,tx_id=tx_id)
             g.session.add(order)
@@ -164,7 +167,7 @@ def order_book():
         data['buy_amount'] = order.buy_amount
         data['sell_amount'] = order.sell_amount
         data['signature'] = order.signature
-        data['tx_id'] = order.tx_id
+        # data['tx_id'] = order.tx_id
         result.append(data)
     
     return jsonify(result)

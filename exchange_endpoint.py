@@ -101,8 +101,6 @@ def log_message(d):
 
 """ End of helper methods """
 
-
-
 @app.route('/trade', methods=['POST'])
 def trade():
     print("In trade endpoint")
@@ -128,7 +126,6 @@ def trade():
           
         #Your code here
         #Note that you can access the database session using g.session
-
         sig = content.get('sig')
         payload = content.get('payload')
         if check_sig(payload, sig): # TODO: Check the signature

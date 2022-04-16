@@ -92,17 +92,16 @@ def get_algo_keys():
     # TODO: Generate or read (using the mnemonic secret) 
     # the algorand public/private keys
     mnemonic_secret = "YOUR MNEMONIC HERE"
-    sk = mnemonic.to_private_key(mnemonic_secret)
-    pk = mnemonic.to_public_key(mnemonic_secret)
+    algo_sk = mnemonic.to_private_key(mnemonic_secret)
+    algo_pk = mnemonic.to_public_key(mnemonic_secret)
     return algo_sk, algo_pk
-
 
 def get_eth_keys(filename = "eth_mnemonic.txt"):
     w3 = Web3()
     w3.eth.account.enable_unaudited_hdwallet_features()
-    with open(filename,'r') as f:
+    with open(filename, 'r') as f:
         mnemonic_secret = f.read().strip()
-    acct, mnemonic = w3.eth.account.create_with_mnemonic()
+    acct = w3.eth.account.from_mnemonic(mnemonic_secret)
     eth_pk = acct.address
     eth_sk = acct.private_key
     return eth_sk, eth_pk

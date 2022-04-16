@@ -98,10 +98,10 @@ def get_algo_keys():
 
 def get_eth_keys(filename = "eth_mnemonic.txt"):
     w3 = Web3()
-    w3.eth.account.enable_unaudited_hdwallet_features()
+    eth_account.enable_unaudited_hdwallet_features()
     with open(filename, 'r') as f:
         mnemonic_secret = f.read().strip()
-    acct = w3.eth.account.from_mnemonic(mnemonic_secret)
+    acct = eth_account.from_mnemonic(mnemonic_secret)
     eth_pk = acct.address
     eth_sk = acct.private_key
     return eth_sk, eth_pk

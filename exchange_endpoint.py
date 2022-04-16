@@ -102,7 +102,7 @@ def get_eth_keys(filename = "eth_mnemonic.txt"):
     w3.eth.account.enable_unaudited_hdwallet_features()
     with open(filename,'r') as f:
         mnemonic_secret = f.read().strip()
-    acct = w3.eth.account.from_mnemonic(mnemonic_secret)
+    acct, mnemonic = w3.eth.account.create_with_mnemonic()
     eth_pk = acct.address
     eth_sk = acct.private_key
     return eth_sk, eth_pk

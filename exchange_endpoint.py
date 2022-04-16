@@ -206,9 +206,20 @@ def trade():
 @app.route('/order_book')
 def order_book():
     fields = [ "buy_currency", "sell_currency", "buy_amount", "sell_amount", "signature", "tx_id", "receiver_pk", "sender_pk" ]
-    
-    # Same as before
-    pass
+    orders = g.session.query(Order)
+    result = []
+
+    for order in orders:
+        data = dict()
+        data['sender_pk'] = order.sender_pk
+        data['receiver_pk'] = order.receiver_pk
+        data['buy_currency'] = order.buy_currency
+        data['sell_currency'] = order.sell_currency
+        data['buy_amount'] = order.buy_amount
+        data['sell_amount'] = order.sell_amount
+        data['signature'] = order.signature
+        # data['tx_id'] = order.tx_id
+        result.append(data)
 
 if __name__ == '__main__':
     app.run(port='5002')

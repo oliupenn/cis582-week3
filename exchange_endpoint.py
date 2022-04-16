@@ -102,10 +102,10 @@ def get_eth_keys(filename = "eth_mnemonic.txt"):
     w3.eth.account.enable_unaudited_hdwallet_features()
     with open(filename,'r') as f:
         mnemonic_secret = f.read().strip()
-        acct = w3.eth.account.from_mnemonic(mnemonic_secret)
-        eth_pk = acct._address
-        eth_sk = acct._private_key
-        return eth_sk, eth_pk
+    acct = w3.eth.account.from_mnemonic(mnemonic_secret)
+    eth_pk = acct._address
+    eth_sk = acct._private_key
+    return eth_sk, eth_pk
 
 def check_sig(payload,sig):
     platform = payload.get('platform')

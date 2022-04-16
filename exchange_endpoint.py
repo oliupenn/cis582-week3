@@ -5,6 +5,7 @@ from flask import jsonify
 import json
 import eth_account
 import algosdk
+from algosdk import mnemonic
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import load_only
@@ -90,17 +91,21 @@ def get_algo_keys():
     
     # TODO: Generate or read (using the mnemonic secret) 
     # the algorand public/private keys
-    
+    mnemonic_secret = "YOUR MNEMONIC HERE"
+    sk = mnemonic.to_private_key(mnemonic_secret)
+    pk = mnemonic.to_public_key(mnemonic_secret)
     return algo_sk, algo_pk
 
 
 def get_eth_keys(filename = "eth_mnemonic.txt"):
     w3 = Web3()
-    
-    # TODO: Generate or read (using the mnemonic secret) 
-    # the ethereum public/private keys
-
-    return eth_sk, eth_pk
+    w3.eth.account.enable_unaudited_hdwallet_features()
+    with open(filename,'r') as f:
+        mnemonic_secret = f.read().strip()
+        acct = w3.eth.account.from_mnemonic(mnemonic_secret)
+        eth_pk = acct._address
+        eth_sk = acct._private_key
+        return eth_sk, eth_pk
 
 def check_sig(payload,sig):
     platform = payload.get('platform')
@@ -179,8 +184,11 @@ def execute_txes(txes):
     #       1. Send tokens on the Algorand and eth testnets, appropriately
     #          We've provided the send_tokens_algo and send_tokens_eth skeleton methods in send_tokens.py
     #       2. Add all transactions to the TX table
-
-    pass
+    send_tokens_algo(g.acl, algo_sk, algo_txes)
+    send_tokens_eth(g.w3, eth_sk, eth_txes)
+    g.session.add_all(algo_txes)
+    g.session.add_all(eth_txes)
+    g.session.commit()
 
 """ End of Helper methods"""
   
@@ -251,13 +259,27 @@ def trade():
             sell_currency = payload['sell_currency']
             buy_amount = payload['buy_amount']
             sell_amount = payload['sell_amount']
+            tx_id = payload['tx_id']
             order = Order(sender_pk=sender_pk,receiver_pk=receiver_pk,buy_currency=buy_currency,sell_currency=sell_currency,buy_amount=buy_amount,sell_amount=sell_amount)
             g.session.add(order)
             g.session.commit()
+
+            if sell_currency == 'Ethereum':
+                tx = g.w3.eth.get_transaction(tx_id)
+                assert tx.value == sell_amount
+            else:
+                tx = g.icl.search_transactions(txid=tx_id)
+                assert tx.amoutn == sell_amount
+
+            if (tx.platform!=tx.order.sell_currency or sell_amount!=tx.order.sell_amount or sender_pk!=tx.order.sender_pk):
+                log_message(payload)
+                return jsonify(False)
+            else:
+                fill_order(order)
+                execute_txes(tx)
         else:
             log_message(payload)
             return jsonify(False)
-        fill_order(order) # TODO: Fill the order
         return jsonify(True)
 
 @app.route('/order_book')
@@ -275,7 +297,7 @@ def order_book():
         data['buy_amount'] = order.buy_amount
         data['sell_amount'] = order.sell_amount
         data['signature'] = order.signature
-        # data['tx_id'] = order.tx_id
+        data['tx_id'] = order.tx_id
         result.append(data)
 
 if __name__ == '__main__':

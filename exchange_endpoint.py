@@ -115,7 +115,7 @@ def check_sig(payload,sig):
     elif platform == 'Algorand':
         return algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, pk)
 
-def fill_order(order,txes=[]):
+def fill_order(order):
     new_order = order
     g.session.add(new_order)
     g.session.commit()

@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from flask import jsonify
 import json
 import eth_account
+from eth_account import Account
 import algosdk
 from algosdk import mnemonic
 from sqlalchemy.orm import sessionmaker
@@ -97,10 +98,10 @@ def get_algo_keys():
     return algo_sk, algo_pk
 
 def get_eth_keys(filename = "eth_mnemonic.txt"):
-    eth_account.enable_unaudited_hdwallet_features()
+    Account.enable_unaudited_hdwallet_features()
     with open(filename, 'r') as f:
         mnemonic_secret = f.read().strip()
-    acct = eth_account.from_mnemonic(mnemonic_secret)
+    acct = Account.from_mnemonic(mnemonic_secret)
     eth_pk = acct.address
     eth_sk = acct.key
     return eth_sk, eth_pk

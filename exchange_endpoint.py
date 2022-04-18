@@ -89,18 +89,14 @@ def connect_to_blockchains():
 """ Helper Methods (skeleton code for you to implement) """
 
 def get_algo_keys():
-    
-    # TODO: Generate or read (using the mnemonic secret) 
-    # the algorand public/private keys
-    mnemonic_secret = "YOUR MNEMONIC HERE"
+    mnemonic_secret = 'present dolphin photo few little fence borrow false help diary often culture oyster bean canvas fetch simple boat chase good little essence link able toy'
     algo_sk = mnemonic.to_private_key(mnemonic_secret)
     algo_pk = mnemonic.to_public_key(mnemonic_secret)
     return algo_sk, algo_pk
 
-def get_eth_keys(filename = "eth_mnemonic.txt"):
+def get_eth_keys():
     Account.enable_unaudited_hdwallet_features()
-    with open(filename, 'r') as f:
-        mnemonic_secret = f.read().strip()
+    mnemonic_secret = 'bleak dad lizard syrup antique sword ugly minor fuel awful swallow fancy'
     acct = Account.from_mnemonic(mnemonic_secret)
     eth_pk = acct.address
     eth_sk = acct.key
